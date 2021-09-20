@@ -9,7 +9,6 @@ double func(Vvector V1){
     return sqdist(V1,VV);
 }
 int main(){
-    cout<<RAND_MAX<<endl;
     Vvector Group[100];
     double limits[5][2]={10,0,10,0,10,0,10,0,10,0};
     if(NewGroupGeneration(Group,100,5,limits))
