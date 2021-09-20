@@ -1,9 +1,13 @@
 #ifndef MYGA_H_INCLUDED
 #define MYGA_H_INCLUDED
 #include "MatrixVector.h"
+#include "MyNum2SS.h"
 #include <ctime>
 #include <cstdlib>
+#include <algorithm>
 
+#define SHUFFLE_TIMES 1000
+#define DEFAULT_ACCURACY 1e-6
 /*
 用C++重新造一编遗传算法的轮子
 */
@@ -25,16 +29,27 @@ bool NewGroupGeneration(Vvector *VV,int num,int siz,double limits[][2]){//产生新
     return true;
 }
 
-void Tierra(Vvector *VV,int num,double (*func)(Vvector)){
-    //VV是需要杀灭的种群
-    //num是留下的个体数，使得num是种群的一半
-    //func是以种群为自变量的评价值函数，评价值越大说明适应性越好
-    for(int i=0;i<num;i++){
-        Vvector V1=VV[i];
-        Vvector V2=VV[2*num-i-1];
-        if(func(V1)>func(V2))
-            VV[i]=VV[2*num-i-1]=V1;
-        else VV[i]=VV[2*num-i-1]=V2;
+void ShuffleVvector(Vvector *VV,int num){
+    srand(time(NULL));
+    for(int i=0;i<SHUFFLE_TIMES;i++){
+        int pos1=rand()%num;
+        int pos2=rand()%num;
+        if(pos1!=pos2) {
+            Vvector buf=VV[pos1];
+            VV[pos1]=VV[pos2];
+            VV[pos2]=buf;
+        }
+    }
+}
+
+void Variation(Vvector VV,double prob,double limits[][2]){
+    for(int i=0;i<VV.siz;i++){
+        VV.val[i]=(VV.val[i]-limits[i][1])/(limits[i][0]-limits[i][1]);
+        bool buf[100];
+        int len=Num2SS(VV.val[i],DEFAULT_ACCURACY,buf);
+        for(int j=0;j<len;j++)
+            if((double)rand()/RAND_MAX<prob)buf[j]=~buf[j];
+        VV.val[i]=SS2Num(buf,len);
     }
 }
 #endif // MYGA_H_INCLUDED

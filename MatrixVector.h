@@ -1,6 +1,7 @@
 #ifndef MATRIXVECTOR_H_INCLUDED
 #define MATRIXVECTOR_H_INCLUDED
 #include <cstring>
+#include <iostream>
 /*
 自己搓了一个向量的轮子
 没找到现成的很好用的矩阵，于是就用这个东西了
@@ -8,12 +9,17 @@
 */
 struct Vvector
 {
-    double val[1000];
+    double val[100];
     int siz;
     void init(){//向量初始化
-        for(int i=0;i<1000;i++)
+        for(int i=0;i<100;i++)
             val[i]=0.0;
         siz=0;
+    }
+    void print(){//输出向量
+        for(int i=0;i<siz;i++)
+            std::cout<<val[i]<<' ';
+        std::cout<<"\n";
     }
     Vvector operator =(const Vvector &VV)//重载一个等号以简化步骤
     {
