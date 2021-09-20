@@ -7,12 +7,13 @@
 没找到现成的很好用的矩阵，于是就用这个东西了
 如果后面学到或者找到现成的好轮子就替换一下
 */
+#define SIZE_OF_Vvector 10
 struct Vvector
 {
-    double val[100];
+    double val[SIZE_OF_Vvector];
     int siz;
     void init(){//向量初始化
-        for(int i=0;i<100;i++)
+        for(int i=0;i<SIZE_OF_Vvector;i++)
             val[i]=0.0;
         siz=0;
     }
@@ -24,7 +25,7 @@ struct Vvector
     Vvector operator =(const Vvector &VV)//重载一个等号以简化步骤
     {
         this->siz=VV.siz;
-        memcpy(this->val,VV.val,this->siz*sizeof(int));
+        memcpy(this->val,VV.val,SIZE_OF_Vvector*sizeof(int));
         return *this;
     }
 };

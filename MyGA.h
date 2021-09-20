@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <algorithm>
 
-#define SHUFFLE_TIMES 1000
+#define SHUFFLE_TIMES 100000
 #define DEFAULT_ACCURACY 1e-6
 /*
 用C++重新造一编遗传算法的轮子
@@ -29,6 +29,17 @@ bool NewGroupGeneration(Vvector *VV,int num,int siz,double limits[][2]){//产生新
     return true;
 }
 
+void Tierra(Vvector *VV,int num,double(*func)(Vvector)){
+    //杀灭一半，并用剩下更好一半的复制填充
+    for(int i=0;i<num/2;i++){
+        Vvector V1=VV[i];
+        Vvector V2=VV[num-i-1];
+        if(func(V1)<func(V2))
+            VV[i]=VV[num-1-i]=V1;
+        else VV[i]=VV[num-1-i]=V2;
+    }
+}
+
 void ShuffleVvector(Vvector *VV,int num){
     srand(time(NULL));
     for(int i=0;i<SHUFFLE_TIMES;i++){
@@ -49,7 +60,7 @@ void Variation(Vvector VV,double prob,double limits[][2]){
         int len=Num2SS(VV.val[i],DEFAULT_ACCURACY,buf);
         for(int j=0;j<len;j++)
             if((double)rand()/RAND_MAX<prob)buf[j]=~buf[j];
-        VV.val[i]=SS2Num(buf,len);
+        VV.val[i]=SS2Num(buf,len)*(limits[i][0]-limits[i][1])+limits[i][1];
     }
 }
 #endif // MYGA_H_INCLUDED
