@@ -64,3 +64,21 @@ void Variation(Vvector VV,double prob,double limits[][2]){
     }
 }
 #endif // MYGA_H_INCLUDED
+
+void Cross(Vvector *VV,int num){
+    //VV=需要交叉的种群
+    //num=种群规模
+    //func:评价函数，评价函数越小则表示结果越好
+    for(int i=0;i<num/2;i++){
+        int siz=VV[0].siz;
+        bool num1[100],num2[100];
+        for(int j=0;j<siz;j++){
+            int len=Num2SS(VV[i].val[j],DEFAULT_ACCURACY,num1);
+            len=Num2SS(VV[num-i-1].val[j],DEFAULT_ACCURACY,num2);
+            int pos=rand()%len;
+            for(int k=0;k<pos;k++)std::swap(num1[k],num2[k]);
+            VV[i].val[j]=SS2Num(num1,len);
+            VV[num-i-1].val[j]=SS2Num(num2,len);
+        }
+    }
+}
